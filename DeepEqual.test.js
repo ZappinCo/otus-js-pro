@@ -239,4 +239,25 @@ describe('DeepEqual#compare', () => {
       expect(de2.compare({ a: 1 }, { a: 1 })).toBe(true);
     });
   });
+
+  describe('объект с self-ссылкой', () => {
+    it('равен себе с теми же значениями', () => {
+      expect(de.compare(selfRef('x'), selfRef('x'))).toBe(true);
+    });
+
+    it('не равен, если отличается скалярное поле', () => {
+      expect(de.compare(selfRef('x'), selfRef('y'))).toBe(false);
+    });
+
+    it('сравнение объекта с самим собой даёт true', () => {
+      const a = selfRef('x');
+      expect(de.compare(a, a)).toBe(true);
+    });
+
+    it('циклический объект не равен плоскому с тем же полем', () => {
+      const cyc = selfRef('x');
+      const flat = { name: 'x' };
+      expect(de.compare(cyc, flat)).toBe(false);
+    });
+  });
 });

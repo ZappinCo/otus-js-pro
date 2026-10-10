@@ -33,7 +33,7 @@ class StringComparator extends Comparator {
     if (context.caseSensitive)
       return a === b;
     else
-      return a.toLower() === b.toLower();
+      return a.toLowerCase() === b.toLowerCase();
   }
 }
 
@@ -136,6 +136,9 @@ class RegExpComparator extends Comparator {
 class DeepEqual {
   #comparators = [];
   caseSensitive = true;
+  #visited = new WeakMap();
+  #inProgress = false;
+
   constructor() {
     this.#addComparator(new BaseComparator);
     this.#addComparator(new StringComparator);
@@ -160,23 +163,41 @@ class DeepEqual {
   }
 
   compare(a, b) {
-
-    let isNull = (value) => { return value !== undefined && value !== null && value !== NaN }
-    if (!isNull(a) || !isNull(b))
-      return a === b;
-
-    if (typeof a !== typeof b) {
-      console.log(`cant compare different types ${a} ${b}`);
-      return false;
+    const isRoot = !this.#inProgress;
+    if (isRoot) {
+      this.#visited = new WeakMap();
+      this.#inProgress = true;
     }
-
     try {
+      let isNull = (value) => { return value !== undefined && value !== null && value !== NaN }
+      if (!isNull(a) || !isNull(b))
+        return a === b;
+
+      if (typeof a !== typeof b) {
+        console.log(`cant compare different types ${a} ${b}`);
+        return false;
+      }
+
+      if (typeof a === "object" && a !== null) {
+        let seenB = this.#visited.get(a);
+        if (seenB && seenB.has(b))
+          return true;
+        if (!seenB) {
+          seenB = new WeakSet();
+          this.#visited.set(a, seenB);
+        }
+        seenB.add(b);
+      }
+
       const comparator = this.#findComparator(a);
       if (!comparator) {
         throw new Error(`No comparator for ${a}`);
       }
       return comparator.compare(a, b, this);
+
     } finally {
+      if (isRoot)
+        this.#inProgress = false;
     }
   }
 }
