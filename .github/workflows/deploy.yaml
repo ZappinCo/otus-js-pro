@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24.x" # Specify your desired Node.js version
+      - run: npm ci
       - run: npm run build
       - uses: peaceiris/actions-gh-pages@v4
         with:
