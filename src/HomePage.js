@@ -99,7 +99,6 @@ export class HomePage {
   update() {
     const { user, theme } = store.getState();
     const currentPath = window.location.hash.slice(1) || '/';
-    const userLabel = user ? `Вошли как ${user.email}` : 'Гость';
 
     this.#homeBtn.style.display = currentPath === '/' ? 'none' : '';
     this.#loginBtn.textContent = user ? 'Выйти' : 'Логин';
