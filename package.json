@@ -1,16 +1,14 @@
 {
-  "name": "deepequal",
-  "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
-  "main": "DeepEqual.js",
+  "name": "routing",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "jest": "^30.5.2"
+    "vite": "^8.3.4"
   }
 }
