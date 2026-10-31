@@ -1,4 +1,3 @@
-import router from './router.js';
 import { store } from './storeInstance.js';
 
 export class ArticlesPage {
