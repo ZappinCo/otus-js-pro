@@ -1,11 +1,12 @@
-import useLocalStorage from "../store/useLocalStorage";
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { login } from "../store/slices/userSlice";
 
-export function LoginPage() {
+export default function LoginPage() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const [user, setUser] = useLocalStorage('userEmail', {});
+  const dispatch = useDispatch();
   let navigate = useNavigate();
 
   const onSubmit = (e) => {
@@ -16,7 +17,7 @@ export function LoginPage() {
       alert('Заполните все поля');
       return;
     }
-    setUser(email);
+    dispatch(login(email));
     navigate("/")
   };
 
@@ -33,8 +34,7 @@ export function LoginPage() {
             className=""
             placeholder="example@mail.com"
             id="email"
-            required = {true}
-            value={user.email}
+            required={true}
             ref={emailRef}
           />
           <label htmlFor="password">Пароль</label>
@@ -43,7 +43,7 @@ export function LoginPage() {
             className=""
             placeholder="••••••••"
             id="password"
-            required = {true}
+            required={true}
             ref={passwordRef}
           />
           <button className="login-submit-btn" type='submit'> Войти</button>

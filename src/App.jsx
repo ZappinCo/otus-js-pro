@@ -1,14 +1,14 @@
-import { Link, Routes, Route, useLocation } from "react-router"
-import { AboutPage } from "./pages/AboutPage"
-import { ArticlesPage } from "./pages/ArticlesPage"
-import { LoginPage } from "./pages/LoginPage"
-import { MainPage } from "./pages/MainPage"
+import { Link, useLocation, Outlet } from "react-router"
 import { ThemeButton } from "./theme/ThemeButton"
-import useLocalStorage from "./store/useLocalStorage"
+import { Loader } from "./components/Loader";
+import { Suspense } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "./store/slices/userSlice";
 
 export function App() {
   const location = useLocation();
-  const [user, setUser] = useLocalStorage('userEmail');
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   return (
     <div className="home-page">
@@ -23,16 +23,13 @@ export function App() {
           <Link to="/articles" className="home-btn home-btn-articles">Статьи</Link>
           {!user ?
             <Link to="/login" className="home-btn home-btn-login">Логин</Link> :
-            <button className="home-btn home-btn-logout" onClick={()=>{setUser('')}}>Выйти</button>
+            <button className="home-btn home-btn-logout" onClick={() => { dispatch(login('')) }}>Выйти</button>
           }
         </nav>
       </div>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/articles" element={<ArticlesPage />} />
-        <Route path="/login" element={<LoginPage />} />
-      </Routes>
+      <Suspense fallback={<Loader />}>
+        <Outlet />
+      </Suspense>
     </div>
 
   )

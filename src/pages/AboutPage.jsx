@@ -1,14 +1,14 @@
-import useLocalStorage from "../store/useLocalStorage.js";
+import { useSelector } from "react-redux";
 
-export function AboutPage() {
-  const [savedArticles,] = useLocalStorage('savedArticles');
-  const [user,] = useLocalStorage('userEmail');
-  const [theme,] = useLocalStorage('theme');
+export default function AboutPage() {
+  const user = useSelector((state) => state.user);
+  const theme = useSelector((state) => state.theme);
+  const savedArticles = useSelector((state) => state.articles);
 
   let data = [
     ['Пользователь', user ? user : 'гость'],
     ['Тема', theme],
-    ['Избранных статей', String(savedArticles.length)]
+    ['Избранных статей', String(savedArticles.saved.length)]
   ];
 
   return <div className="about-page">
@@ -18,7 +18,7 @@ export function AboutPage() {
       </div>
       <div className="about-section">
         <h2>О проекте</h2>
-        <p>Версия: 2.0.0</p> 
+        <p>Версия: 2.0.0</p>
         <p> Разработано в рамках домашнего задания: Современные паттерны в React и кастомные хуки</p>
 
         <h2>Текущее состояние (store)</h2>
