@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useTheme } from './ThemeContext';
+import { useSelector } from 'react-redux';
 
 export function ThemeSync() {
-  const { theme } = useTheme();
+  const theme = useSelector((state) => state.theme);
 
   useEffect(() => {
     document.body.dataset.theme = theme;
