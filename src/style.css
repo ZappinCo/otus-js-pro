@@ -20,7 +20,6 @@
   --color-text: #1f2937;
   --color-text-muted: #6b7280;
   --color-border: #cbd5e1;
-  --color-nav-bg: #1f2937;
   --color-nav-text: #cbd5e1;
 
   --radius-sm: 6px;
@@ -104,6 +103,7 @@ code {
   padding: 8px 16px;
   font-size: 0.95rem;
   font-weight: 500;
+  height: 40px;
   color: var(--color-primary);
   background: transparent;
   border: 1px solid var(--color-border);
@@ -188,6 +188,13 @@ nav a.active {
   gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: baseline;
 }
 
 .home-btn {
@@ -576,7 +583,6 @@ body[data-theme="dark"] {
   --color-text: #e2e8f0;
   --color-text-muted: #94a3b8;
   --color-border: #334155;
-  --color-nav-bg: #020617;
   --color-nav-text: #94a3b8;
 }
 
@@ -631,8 +637,9 @@ body[data-theme="dark"] .about-state-list li {
   border: 2px solid var(--color-accent);
   background: transparent;
   padding: 5px;
-  width: 50px;
-  min-width: 50px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
 }
 
 .home-btn-theme:hover {
