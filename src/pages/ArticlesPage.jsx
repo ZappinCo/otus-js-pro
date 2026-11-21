@@ -1,25 +1,20 @@
 import { useState } from 'react';
-import useLocalStorage from '../store/useLocalStorage.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleSavedArticle } from '../store/slices/articlesSlice';
+import { useNavigate } from 'react-router';
 
-export function ArticlesPage() {
+export default function ArticlesPage() {
   const [saved, setSave] = useState(false);
-  const [savedArticles, setSavedArticles] = useLocalStorage('savedArticles', []);
-
-
-  const articles = [
-    { id: 1, title: 'Статья 1', summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed tellus consequat, maximus sem id, interdum erat.' },
-    { id: 2, title: 'Статья 2', summary: 'Donec vehicula metus id dui fringilla aliquam. Praesent eu metus eros.' },
-    { id: 3, title: 'Статья 3', summary: 'Suspendisse pharetra gravida nisl. Nunc tempor at turpis vel pretium.' },
-  ];
-
+  const articles = useSelector((state) => state.articles);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const visible = saved ?
-    articles.filter(a => savedArticles.includes(a.id)) :
-    articles;
+    articles.all.filter(a => articles.saved.includes(a.id)) :
+    articles.all;
 
-  const toggleSaved = (article) => {
-    setSavedArticles(savedArticles.includes(article.id)
-      ? savedArticles.filter(id => id !== article.id)
-      : [...savedArticles, article.id]);
+  const toggleSaved = (e, article) => {
+    e.stopPropagation();
+    dispatch(toggleSavedArticle(article.id));
   }
 
   return (
@@ -29,20 +24,22 @@ export function ArticlesPage() {
           <h1>Статьи</h1>
         </div>
         <div className="articles-filter">
-          <button className={`filter-btn ${!saved ? 'active' : ''}`} onClick={()=>{setSave(false)}}>Все</button>
-          <button className={`filter-btn ${saved ? 'active' : ''}`} onClick={()=>{setSave(true)}}>Избранное</button>
+          <button className={`filter-btn ${!saved ? 'active' : ''}`} onClick={() => { setSave(false) }}>Все</button>
+          <button className={`filter-btn ${saved ? 'active' : ''}`} onClick={() => { setSave(true) }}>Избранное</button>
         </div>
         <div className="articles-list">
           {visible.length === 0 ?
             <p>Пока нет статей в избранном.</p> :
             visible.map((article) => {
-              const isSaved = savedArticles.includes(article.id)
+              const isSaved = articles.saved.length ? articles.saved.includes(article.id) : false
               return (
-                <div className="article-card" key={article.id}>
+                <div className="article-card" key={article.id} onClick={() => {
+                  navigate(`/articles/${article.id}`)
+                }}>
                   <h2>{article.title}</h2>
                   <p>{article.summary}</p>
                   <button className={`article-read-btn  ${isSaved ? ' saved' : ''}`}
-                    onClick={() => toggleSaved(article)}>
+                    onClick={(e) => toggleSaved(e, article)}>
                     {isSaved ? '★ В избранном' : '☆ В избранное'}
                   </button>
                 </div>

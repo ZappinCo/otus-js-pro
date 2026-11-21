@@ -1,17 +1,16 @@
+import { useSelector } from "react-redux";
 
-import useLocalStorage from "../store/useLocalStorage";
+export default function MainPage() {
 
-export function MainPage() {
-
-    const [savedArticles,] = useLocalStorage('savedArticles',[]);
-    const [user,] = useLocalStorage('userEmail');
-    const [theme,] = useLocalStorage('theme');
+    const user = useSelector((state) => state.user);
+    const theme = useSelector((state) => state.theme);
+    const savedArticles = useSelector((state) => state.articles);
 
     return (
         <div className="article-card">
             <p>Современные паттерны в React и кастомные хуки</p>
             <p className="home-status">
-                {`${user ? `Вошли как ${user}` : 'Гость'} Тема: ${theme}  Избранное: ${savedArticles.length}`}</p>
+                {`${user ? `Вошли как ${user}` : 'Гость'} Тема: ${theme}  Избранное: ${savedArticles.saved.length}`}</p>
         </div>
     )
 }
